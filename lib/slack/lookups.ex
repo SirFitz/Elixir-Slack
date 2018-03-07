@@ -6,9 +6,12 @@ defmodule Slack.Lookups do
   """
   def lookup_user_id("@" <> user_name, slack) do
     slack.users
-    |> Map.values
-    |> Enum.find(%{}, fn user -> user.name == user_name end)
+    |> Enum.find(fn user -> user.name == "romario" end)  
     |> Map.get(:id)
+    
+    # old code 
+    #|> Map.values
+    #|> Enum.find(%{}, fn user -> user.name == user_name end)
   end
 
   @doc ~S"""
@@ -23,8 +26,7 @@ defmodule Slack.Lookups do
   end
   def lookup_direct_message_id(user_id, slack) do
     slack.ims
-    |> Map.values
-    |> Enum.find(%{}, fn direct_message -> direct_message.user == user_id end)
+    |> Enum.find(fn direct_message -> direct_message.user == user_id end)
     |> Map.get(:id)
   end
 
@@ -68,7 +70,9 @@ defmodule Slack.Lookups do
     "#" <> slack.groups[channel_id].name
   end
 
-  defp find_channel_by_name(nested_map, name) do
-    Enum.find_value(nested_map, fn {_id, map} -> if map.name == name, do: map, else: nil end)
+  defp find_channel_by_name(channel_list, name) do
+     Enum.find(channel_list, fn channel -> channel.name == channel end) 
+   # Enum.find_value(channel_list, fn channel -> if channel.name == name do channel end end)
+   #old_code - Enum.find_value(nested_map, fn {_id, map} -> if map.name == name, do: map, else: nil end)
   end
 end
